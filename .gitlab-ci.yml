@@ -37,7 +37,7 @@ Ship image:
     - env | sort
     - PASSWORD_DECODED=$(echo ${HARBOR_ROBOT_SECRET} | base64 -d)
     - echo "{\"auths\":{
-      \"harbor.cicd.s15m.nl\":{\"username\":\"${HARBOR_ROBOT_NAME}\",\"password\":\"${PASSWORD_DECODED}\"}
+      \"${HARBOR_URL}\":{\"username\":\"${HARBOR_ROBOT_NAME}\",\"password\":\"${PASSWORD_DECODED}\"}
       }}" > /kaniko/.docker/config.json
     - /kaniko/executor
       --context "."
