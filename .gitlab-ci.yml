@@ -1,0 +1,49 @@
+stages:
+  - build
+  - ship
+
+Build image:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.8.1-debug
+    entrypoint: [ "" ]
+  script:
+    - env | sort
+    - PASSWORD_DECODED=$(echo ${HARBOR_ROBOT_SECRET} | base64 -d)
+    - echo "{\"auths\":{
+      \"harbor.cicd.s15m.nl\":{\"username\":\"${HARBOR_ROBOT_NAME}\",\"password\":\"${PASSWORD_DECODED}\"}
+      }}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "."
+      --ignore-path=/usr/bin/newuidmap
+      --ignore-path=/usr/bin/newgidmap
+      --no-push
+  rules:
+    - if: $CI_COMMIT_BRANCH
+  # only:
+  #   - branches
+  # except:
+  #   - master
+
+Ship image:
+  stage: ship
+  image:
+    name: gcr.io/kaniko-project/executor:v1.8.1-debug
+    entrypoint: [ "" ]
+  variables:
+    IMAGE_NAME: pro/pgclient
+    IMAGE_TAG: ${CI_COMMIT_TAG}
+  script:
+    - env | sort
+    - PASSWORD_DECODED=$(echo ${HARBOR_ROBOT_SECRET} | base64 -d)
+    - echo "{\"auths\":{
+      \"harbor.cicd.s15m.nl\":{\"username\":\"${HARBOR_ROBOT_NAME}\",\"password\":\"${PASSWORD_DECODED}\"}
+      }}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "."
+      --cache=true
+      --destination ${HARBOR_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+      --ignore-path=/usr/bin/newuidmap
+      --ignore-path=/usr/bin/newgidmap
+  rules:
+    - if: $CI_COMMIT_TAG
