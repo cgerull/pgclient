@@ -1,5 +1,10 @@
 FROM  alpine:3.20
 
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+
+RUN echo "Building for $TARGETPLATFORM on $BUILDPLATFORM"
+
 RUN apk update --no-cache \
  && apk upgrade --no-cache \
  && apk --no-cache add \
@@ -7,7 +12,6 @@ RUN apk update --no-cache \
     vim \
     bash \
     postgresql16-client \
- && wget https://dl.min.io/client/mc/release/linux-arm64/mc -O /usr/bin/mc \
- && chmod +x /usr/bin/mc
+    minio-client
 
 CMD tail -f /dev/null
