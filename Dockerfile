@@ -1,4 +1,5 @@
-FROM  alpine:3.20
+# FROM alpine:3.20
+FROM  harbor.cicd.s15m.nl/docker-hub-proxy/alpine:3.20
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
