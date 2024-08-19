@@ -1,6 +1,7 @@
 #!/bin/sh
 #
-export PGDUMP_DIR=/backup
+PGDUMP_DIR="${BACKUP_DIR:-/backup}"
+export PGDUMP_DIR
 TS="$(date '+%Y-%m-%d-%H-%M')"
 export TS
 echo "$(date '+%Y-%m-%d-%H-%M') -- Starting PostgreSql dump of all databases." > "${PGDUMP_DIR}/${TS}"-dump.log
