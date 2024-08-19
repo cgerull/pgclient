@@ -15,4 +15,6 @@ RUN apk update --no-cache \
     postgresql16-client \
     minio-client
 
+COPY scripts /scripts
+
 CMD tail -f /dev/null
