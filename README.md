@@ -7,7 +7,7 @@ This Docker container is based on the Alpine Linux distribution and includes sev
 To build the Docker image, run the following command in the directory containing the Dockerfile:
 
 ```bash
-docker build -t pgclient:latest .
+docker buildx build --platform linux/amd64,linux/arm64 --push -t cgerull/pgclient:<my tag> .
 ```
 
 The image is also build with every release and published to `docker.io/cgerull/pglient`
